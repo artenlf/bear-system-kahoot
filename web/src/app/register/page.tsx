@@ -2,7 +2,7 @@
 import { useState } from "react"
 
 export default function RegistroQuiz() {
-    const [name, setName] = useState("")
+    const [nickName, setNickName] = useState("")
     const [email, setEmail] = useState("")
     const [passWord, setPassWord] = useState("")
     const [acceptTerm, setAcceptTerm] = useState(false)
@@ -13,7 +13,7 @@ export default function RegistroQuiz() {
         const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const isValid = regexEmail.test(email)
 
-        if (!name || !email || !passWord) {
+        if (!nickName || !email || !passWord) {
             setErro("Por favor, preencha todos os campos.")
             return
         }
@@ -29,9 +29,9 @@ export default function RegistroQuiz() {
         }
 
         // Here you would add the logic to send the form data to your backend.
-        console.log("Formulário enviado", { nome: name, email, senha: passWord, aceitouTermos: acceptTerm })
+        console.log("Formulário enviado", { nome: nickName, email, senha: passWord, aceitouTermos: acceptTerm })
         // Reset form or redirect user after successful registration
-        setName("")
+        setNickName("")
         setEmail("")
         setPassWord("")
         setAcceptTerm(false)
@@ -51,8 +51,8 @@ export default function RegistroQuiz() {
                             id="nome"
                             type="text"
                             placeholder="Seu nome completo"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            value={nickName}
+                            onChange={(e) => setNickName(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
                         />
                     </div>
