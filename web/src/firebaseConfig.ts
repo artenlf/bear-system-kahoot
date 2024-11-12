@@ -1,16 +1,18 @@
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: process.env.API_KEY,
-  authDomain: process.env.AUTH_DOMAIN,
-  projectId: process.env.PROJECT_ID,
-  storageBucket: process.env.STORAGE_BUCKET,
-  messagingSenderId: process.env.MESSAGING_SENDER_ID,
-  appId: process.env.APP_ID
+  apiKey: "AIzaSyBslaS3x7x16vOSQ388jQsC6XSoqLNIiR8",
+  authDomain: "bear-system-kahoot.firebaseapp.com",
+  projectId: "bear-system-kahoot",
+  storageBucket: "bear-system-kahoot.firebasestorage.app",
+  messagingSenderId: "518699083398",
+  appId: "1:518699083398:web:63426bfc23fc47a74a1307"
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const storage = getStorage(app);
 
-export { app, storage };
+export { app, auth, storage };

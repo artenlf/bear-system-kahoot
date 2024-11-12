@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 
 interface Question {
   question: string;
-  // Add other properties of a question if needed
 }
 
 export function QuestionBox({ question: { questions, currentQuestion, timeLeft } }: { question: { questions: Question[], currentQuestion: number, timeLeft: number } }) {
