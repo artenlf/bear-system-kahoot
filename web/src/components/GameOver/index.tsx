@@ -1,8 +1,13 @@
 import { useGameStore } from '@/store/gameStore'
-import React from 'react'
+import { useRouter } from 'next/navigation'
 
 export const GameOver: React.FC = () => {
-  const { score, questions, resetGame } = useGameStore()
+  const router = useRouter()
+  const { score, questions } = useGameStore()
+
+  const handlePlayAgain = () => {
+    router.push('/lobby')
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 flex flex-col items-center justify-center text-center p-8 rounded-lg shadow-lg">
@@ -14,7 +19,7 @@ export const GameOver: React.FC = () => {
         </p>
       </div>
       <button
-        onClick={resetGame}
+        onClick={handlePlayAgain}
         className="bg-green-400 text-white text-xl font-bold px-10 py-4 rounded hover:bg-green-500"
       >
         Jogar Novamente
