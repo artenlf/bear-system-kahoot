@@ -1,4 +1,4 @@
-import { auth } from '@/firebaseConfig';
+import { auth } from '@/config/firebase';
 import { AuthState } from '@/types/auth.types';
 import {
   createUserWithEmailAndPassword,
