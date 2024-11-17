@@ -1,5 +1,6 @@
 'use client'
 
+import { Separator } from '@/components/ui/separator';
 import { useAuthStore } from '@/store/authStore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -85,7 +86,7 @@ export default function LoginPage() {
               Entrar
             </button>
             <div className='w-full flex flex-col items-center gap-2'>
-              <span>------------------------</span>
+              <Separator className='my-2' />
               <p className='text-zinc-400 text-sm'>Ainda não tem conta?
 
               </p>
