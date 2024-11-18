@@ -20,8 +20,12 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ loading: true, error: null });
       const { user } = await signInWithEmailAndPassword(auth, email, password);
       set({ user, isAuthenticated: true });
-    } catch (error: any) {
-      set({ error: error.message });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        set({ error: error.message });
+      } else {
+        set({ error: 'An unknown error occurred' });
+      }
     } finally {
       set({ loading: false });
     }
@@ -32,8 +36,12 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ loading: true, error: null });
       await signOut(auth);
       set({ user: null, isAuthenticated: false });
-    } catch (error: any) {
-      set({ error: error.message });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        set({ error: error.message });
+      } else {
+        set({ error: 'An unknown error occurred' });
+      }
     } finally {
       set({ loading: false });
     }

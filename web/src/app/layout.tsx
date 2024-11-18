@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Kahoot! | Bear System",
-  description: "Jogue Kahoot com seus amigos!",
+  title: "SabeTudo! | Bear System",
+  description: "O jogo de perguntas e respostas para jogar e aprender com os amigos!",
 };
 
 export default function RootLayout({

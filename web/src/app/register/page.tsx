@@ -3,7 +3,7 @@ import { useAuthStore } from "@/store/authStore"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
-export default function RegistroQuiz() {
+export default function RegisterPage() {
   const router = useRouter()
   const { register, loading, error } = useAuthStore()
   const [nickName, setNickName] = useState("")
@@ -56,7 +56,7 @@ export default function RegistroQuiz() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
-        <h2 className="text-2xl font-bold text-center mb-6 text-black">Registro para o Quiz KaHoot</h2>
+        <h2 className="text-2xl font-bold text-center mb-6 text-black">Registro para o SabeTudo!</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           {(erro || error) && (
             <div className="text-red-500 text-sm">
