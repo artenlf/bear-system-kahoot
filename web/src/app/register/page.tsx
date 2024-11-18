@@ -2,6 +2,8 @@
 import { useAuthStore } from "@/store/authStore"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -129,6 +131,18 @@ export default function RegisterPage() {
           >
             Registrar
           </button>
+          <div className='w-full flex flex-col items-center gap-2'>
+              <Separator className='my-2' />
+              <p className='text-zinc-400 text-sm'>Já possui uma conta?
+
+              </p>
+              <Link
+                href={'/login'}
+                className="text-blue-500 underline hover:text-blue-700"
+              >
+                Faça login
+              </Link>
+          </div>
         </form>
       </div>
     </div>
