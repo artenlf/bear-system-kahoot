@@ -1,5 +1,5 @@
 import { database } from '@/config/firebase';
-import { questions } from '@/mockQuestions';
+import { generateQuizQuestions } from '@/lib/questionGenerator';
 import { Player, PlayerAnswer } from '@/types/player.types';
 import { RoomManagerStore } from '@/types/room.store.types';
 import { QuizRoom } from '@/types/room.types';
@@ -137,27 +137,27 @@ export const useRoomStore = create<RoomManagerStore>((set, get) => ({
 
   beginQuiz: async (roomId: string) => {
     try {
+      const questions = await generateQuizQuestions(10);
+
+      if (!questions) {
+        throw new Error('Não foi possível gerar as questões do quiz');
+      }
+
       const roomRef = ref(database, `rooms/${roomId}`);
       const snapshot = await getDb(roomRef);
       const room = snapshot.val();
 
       const now = Date.now();
-      const gameQuestions = [...questions];
-
-      await setDb(ref(database, `rooms/${roomId}`), {
+      await setDb(roomRef, {
         ...room,
         status: 'playing',
         startTime: now,
         currentQuestionStartTime: now,
         currentQuestionIndex: 0,
+        questions,
         initialParticipantCount: room.participants.length,
-        questions: gameQuestions, // Replace with real questions
-        readyForNext: false,
         answers: []
       });
-
-      useGameStore.getState().setLoading(false);
-      useGameStore.getState().setQuestionIndex(0);
 
       return true;
     } catch (error) {
