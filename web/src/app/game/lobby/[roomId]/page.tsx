@@ -81,7 +81,7 @@ export default function LobbyPage({ params }: { params: Promise<{ roomId: string
   const handleLeave = async () => {
     if (activeRoom && user) {
       await exitRoom(activeRoom.id, user.uid)
-      router.push('/menu')
+      router.push('/game/menu')
     }
   }
 
