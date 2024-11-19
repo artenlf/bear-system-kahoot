@@ -48,6 +48,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set((state) => ({ timeRemaining: state.timeRemaining - 1 }));
     } else {
       get().handleAnswer(-1);
+      get().stopTimer();
     }
   },
 

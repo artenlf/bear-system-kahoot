@@ -47,7 +47,7 @@ GERE AS QUESTÕES AGORA:`;
         inputs: prompt,
         parameters: {
           max_new_tokens: 2048,
-          temperature: 0.3,
+          temperature: 0.7,
           top_p: 0.95,
           do_sample: true,
           return_full_text: false
@@ -63,29 +63,45 @@ GERE AS QUESTÕES AGORA:`;
     const data = await response.json();
     const generatedText = data[0]?.generated_text;
 
-    const jsonMatch = generatedText.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
-      console.warn('Invalid JSON response, using fallback questions');
-      return getRandomQuestions(fallbackQuestions, amount);
+    try {
+      const jsonMatch = generatedText.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error('Invalid JSON');
+
+      const parsed = JSON.parse(jsonMatch[0]);
+      let questions = parsed.questions.map((q: Question, index: number) => ({
+        id: index + 1,
+        question: q.question,
+        answers: shuffleExceptFirst(q.answers),
+        correctAnswer: 0
+      }));
+
+      questions = shuffleQuestions(questions);
+
+      if (questions.length >= amount) {
+        return questions.slice(0, amount);
+      }
+    } catch (error) {
+      console.warn('JSON parsing error:', error);
     }
 
-    const parsed = JSON.parse(jsonMatch[0]);
-    const questions: Question[] = parsed.questions.map((q: Question, index: number) => ({
-      id: q.id || index + 1,
-      question: q.question,
-      answers: q.answers,
-      correctAnswer: q.correctAnswer
-    }));
-
-    if (questions.length === 0) {
-      console.warn('No questions generated, using fallback questions');
-      return getRandomQuestions(fallbackQuestions, amount);
-    }
-
-    return questions;
+    return getRandomQuestions(fallbackQuestions, amount);
 
   } catch (error) {
-    console.error('Question generation error:', error);
+    console.error('Generation error:', error);
     return getRandomQuestions(fallbackQuestions, amount);
   }
+}
+
+function shuffleExceptFirst<T>(array: T[]): T[] {
+  const first = array[0];
+  const rest = array.slice(1);
+  const shuffledRest = rest.sort(() => Math.random() - 0.5);
+  return [first, ...shuffledRest];
+}
+
+function shuffleQuestions(questions: Question[]): Question[] {
+  return [...questions].sort(() => Math.random() - 0.5).map((q, i) => ({
+    ...q,
+    id: i + 1
+  }));
 }

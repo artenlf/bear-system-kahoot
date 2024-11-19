@@ -98,6 +98,7 @@ export const useRoomStore = create<RoomManagerStore>((set, get) => ({
       const answer: PlayerAnswer = {
         playerId,
         questionId: room.currentQuestionIndex,
+        // Always false for timeout (-1) or wrong answer
         isCorrect: answerIndex === room.questions[room.currentQuestionIndex].correctAnswer,
         answeredAt: Date.now()
       };
