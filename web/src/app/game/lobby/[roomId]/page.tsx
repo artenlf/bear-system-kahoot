@@ -2,13 +2,15 @@
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { toast } from "@/hooks/use-toast"
 import { useAuthStore } from "@/store/authStore"
 import { useRoomStore } from "@/store/roomStore"
 import { useRouter } from "next/navigation"
-import { use, useEffect } from "react"
+import { use, useEffect, useState } from "react"
 
 export default function LobbyPage({ params }: { params: Promise<{ roomId: string }> }) {
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
   const { user } = useAuthStore()
   const { activeRoom, participants, joinRoom, exitRoom, beginQuiz } = useRoomStore()
   const resolvedParams = use(params)
@@ -45,19 +47,41 @@ export default function LobbyPage({ params }: { params: Promise<{ roomId: string
     }
   }, [activeRoom?.status, router, resolvedParams.roomId])
 
-  const handleStartGame = async () => {
-    if (isHost && activeRoom) {
-      const success = await beginQuiz(activeRoom.id)
-      if (success) {
-        router.push(`/game/room/${resolvedParams.roomId}`)
+  async function handleStartGame() {
+    try {
+      setIsLoading(true);
+      toast({
+        title: "Gerando questões...",
+        description: "Isso pode levar alguns segundos.",
+        duration: 3000,
+      });
+
+      if (!activeRoom?.id) {
+        throw new Error("Sala não encontrada");
       }
+
+      const success = await beginQuiz(activeRoom.id);
+      if (!success) {
+        throw new Error("Não foi possível iniciar o quiz");
+      }
+
+    } catch (error) {
+      console.error('Error starting game:', error);
+      toast({
+        title: "Erro",
+        description: error instanceof Error ? error.message : "Ocorreu um erro ao iniciar o jogo.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    } finally {
+      setIsLoading(false);
     }
   }
 
   const handleLeave = async () => {
     if (activeRoom && user) {
       await exitRoom(activeRoom.id, user.uid)
-      router.push('/menu')
+      router.push('/game/menu')
     }
   }
 
@@ -110,9 +134,16 @@ export default function LobbyPage({ params }: { params: Promise<{ roomId: string
           {isHost && (
             <Button
               onClick={handleStartGame}
-              disabled={participants.length < 2}
+              disabled={participants.length < 2 || isLoading}
             >
-              Iniciar jogo
+              {isLoading ? (
+                <>
+                  <span className="animate-spin mr-2">⏳</span>
+                  Gerando perguntas...
+                </>
+              ) : (
+                'Iniciar jogo'
+              )}
             </Button>
           )}
         </div>
